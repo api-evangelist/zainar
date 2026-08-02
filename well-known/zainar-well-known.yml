@@ -1,0 +1,75 @@
+generated: '2026-08-02'
+method: probed
+source: live GET of /.well-known/* across every ZaiNar host found in apis.yml
+summary:
+  documents_found: 0
+  hosts_probed: 5
+  note: 'No /.well-known/ discovery documents are published on any ZaiNar host. Two
+    hosts answer every path with a catch-all body rather than a real document — recorded
+    below so a later round does not mistake them for hits.'
+hosts:
+- host: zainartech.com
+  role: marketing website
+  catch_all: html-404
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: 'text/html', file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: 'text/html', file: null}
+- host: api.zainartech.com
+  role: AWS API Gateway behind Cloudflare (credential-gated)
+  catch_all: 'json-403 {"message":"Forbidden"} on every path including /'
+  documents:
+  - {path: /.well-known/security.txt, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/openid-configuration, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/api-catalog, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/agent-card.json, status: 403, content_type: application/json, file: null}
+  - {path: /.well-known/agent.json, status: 403, content_type: application/json, file: null}
+- host: api.wifi-prd-us.zainar.net
+  role: production Wi-Fi location cloud API (US)
+  catch_all: 'text-404 "Not Found"'
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: text/plain, file: null}
+- host: api.wifi-prd-jpn.zainar.net
+  role: production Wi-Fi location cloud API (APAC)
+  catch_all: 'text-404 "Not Found"'
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: text/plain, file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: text/plain, file: null}
+- host: zps.zainartech.com
+  role: ZaiNar Positioning System web console (single-page app)
+  catch_all: 'SPA-200 — returns HTTP 200 with the app HTML shell for EVERY path,
+    including /openapi.json, /swagger.json, /llms.txt and /.well-known/agent-card.json.
+    All of these are FALSE POSITIVES and were rejected on body inspection (<!doctype html>).'
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/ai-plugin.json, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+  - {path: /.well-known/agent.json, status: 200, content_type: text/html, file: null, rejected: spa-html-shell}
+x-evidence:
+  fetched: '2026-08-02'
+  hosts:
+  - https://zainartech.com
+  - https://api.zainartech.com
+  - https://api.wifi-prd-us.zainar.net
+  - https://api.wifi-prd-jpn.zainar.net
+  - https://zps.zainartech.com

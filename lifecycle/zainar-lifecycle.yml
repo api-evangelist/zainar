@@ -1,0 +1,47 @@
+generated: '2026-08-02'
+method: derived
+source: https://github.com/zainar/locate-latency-measurement-script
+note: 'DERIVED. ZaiNar publishes no versioning policy, no deprecation policy, no SLA
+  and no status page. Only the version scheme is observable, from the API base path.
+  Absences below are recorded findings, not gaps in the probe.'
+versioning:
+  scheme: uri-path
+  current: v2
+  path_segment: /pipeline/r/api/v2/client
+  docs: null
+deprecation:
+  policy_url: null
+  sunset_header: null
+  deprecation_header: null
+  rfc8594: false
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  probed:
+  - {host: status.zainartech.com, result: no-response}
+  - {host: zainartech.com/status, result: 404}
+environments:
+- {name: prod-us, host: api.wifi-prd-us.zainar.net, production: true}
+- {name: prod-apac, host: api.wifi-prd-jpn.zainar.net, production: true}
+- {name: int, host: api.wifi-int.zainar.net, production: false}
+- {name: dev, host: api.wifi-dev.zainar.net, production: false}
+changelog:
+  url: null
+  note: 'No dated API changelog. The company news feed (zainartech.com/news) is
+    corporate/thought-leadership content, not release notes.'
+deprecated_operations: []
+company_milestones:
+- {date: '2026-02-19', event: 'Emerged from stealth; $100M+ raised at a $1B+ valuation'}
+- {date: '2026-04-20', event: 'Opened Tokyo office; selected by the Tokyo Metropolitan
+    Government for its GX innovation program'}
+gaps:
+- No status page.
+- No deprecation or sunset policy; no RFC 8594 headers observed.
+- No published SLA.
+- No API changelog or release notes.
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://github.com/zainar/locate-latency-measurement-script
+  http_status: 200

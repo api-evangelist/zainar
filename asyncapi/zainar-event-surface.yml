@@ -1,0 +1,83 @@
+generated: '2026-08-02'
+method: derived
+source: https://github.com/zainar/locate-latency-measurement-script
+spec_type: none
+note: 'ZaiNar publishes NO AsyncAPI document and NO public webhook or event
+  documentation. This file is an honest CATALOG of the real-time event surface as
+  implemented by ZaiNar''s own open-source client — it is deliberately NOT an
+  AsyncAPI specification, because authoring one on the provider''s behalf would
+  assert a machine-readable contract ZaiNar does not publish. For the same reason no
+  AsyncAPI or Webhooks pointer is wired in apis.yml; the surface is catalogued under
+  the descriptive StreamingEndpoint type instead. Upgrade this file to a verbatim
+  spec if ZaiNar ever publishes one.'
+publicly_documented: false
+credential_gated: true
+transports:
+- name: WiFi-Cloud
+  protocol: websocket
+  url_template: wss://{api-host}/pipeline/ws/updates/v2/sites/{site_id}
+  hosts:
+  - api.wifi-prd-us.zainar.net
+  - api.wifi-prd-jpn.zainar.net
+  auth: token query parameter (short-lived; obtained from the web app session)
+  subscription: 'Channel selection is encoded in the URL query string, e.g.
+    event=tracker:location'
+  message_shape: '{"id": "<node id>", "update": {"events": {"tracker": {"location":
+    {"x": <number>, "y": <number>, "z": <number>, "meas_id": "<string>"}}}}}'
+  evidence: README.md, measure_latency.py (extract_location_from_event)
+- name: ILaaS
+  protocol: websocket
+  url_template: null
+  auth: token query parameter
+  subscription: 'Client sends a JSON setFilterOptions message after connect:
+    {"action": "setFilterOptions", "accountResName": "<acct-...>", "siteResName":
+    "<site>", "messageTypes": [...]}; server replies with statusCode 200.'
+  message_types:
+  - location-updates
+  - geomatch-updates
+  - alerts-equipment
+  - alerts-safety
+  - alerts-system
+  - alerts-zone
+  - site-updates
+  message_shape: '{"tagResName": "tag-<id>", "measureType": "location", "x": <cm>,
+    "y": <cm>, "z": <cm>, "timestamp": <epoch_ms>, "sns_timestamp": <epoch_ms>,
+    "meas_id": "<string>"}'
+  units_note: 'ILaaS x/y/z are published in centimetres; the first-party client
+    divides by 100 to obtain metres.'
+  evidence: measure_latency.py (subscribe_ilaas, extract_location_from_event)
+- name: ZLP
+  protocol: socket.io
+  url_template: wss://zps-web-api.{env}.zainar.net
+  namespace: /locations
+  auth: 'JWT from the __session cookie issued by the ZPS web console
+    (zps.zainartech.com)'
+  events:
+  - name: GET_NEW_LOCATION_HISTORY
+    direction: server-to-client
+    payload_fields: [location, locationTime]
+  evidence: measure_latency.py (socketio handlers), README.md
+triggering:
+  pattern: trigger-then-stream
+  rest_operation: POST {baseURL}/nodes/{system_id}/action
+  rest_base: https://api.wifi-prd-us.zainar.net/pipeline/r/api/v2/client
+  description: 'A locate is requested over REST against a tracker or anchor node;
+    the resulting location measurement arrives asynchronously on the event stream
+    and is correlated back to the request via meas_id.'
+  request_body_shape: '{"tracker"|"anchor": {"locate": {"repeat_count": <int>,
+    "backoff": <ms>}}, "tags": {"experimentID": "<string>", "exp_tag": "<string>",
+    "ref_loc_id": "<string>", "ref_xy": "<x,y,z>"}}'
+node_types:
+  tracker: [tag, tracker]
+  anchor: [reader, anchor]
+gaps:
+- No AsyncAPI document published on any host.
+- No public event/webhook reference documentation.
+- Channel URLs for WiFi-Cloud and ILaaS must be lifted from an authenticated browser
+  session; they are not discoverable anonymously.
+- No published event schema registry or versioning for event payloads.
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://github.com/zainar/locate-latency-measurement-script
+  http_status: 200
+  files: [README.md, measure_latency.py]

@@ -1,0 +1,28 @@
+generated: '2026-08-02'
+method: searched
+source: public package-registry search
+summary:
+  official_packages: 0
+  note: 'ZaiNar publishes no first-party client libraries or SDKs in any public
+    package registry, and its GitHub organization contains no SDK repository. No
+    SDKs pointer is emitted in apis.yml.'
+packages: []
+registries_searched:
+- {registry: npm, query: zainar, results: 0}
+- {registry: pypi, queries: [zainar, zainar-sdk, pyzainar], results: 0}
+- {registry: rubygems, query: zainar, results: 0}
+- {registry: crates.io, query: zainar, result: rate-limited}
+github_org:
+  url: https://github.com/zainar
+  public_repositories:
+  - {name: locate-latency-measurement-script, language: Python, fork: false, sdk: false,
+     note: 'First-party latency measurement tool that exercises the location API;
+       a utility, not a distributable client library.'}
+  - {name: linux_analogdev, language: C, fork: true, archived: true, sdk: false}
+  - {name: infra_golang-formula, language: SaltStack, fork: true, sdk: false}
+x-evidence:
+  fetched: '2026-08-02'
+  urls:
+  - https://registry.npmjs.org/-/v1/search?text=zainar
+  - https://pypi.org/pypi/zainar/json
+  - https://api.github.com/orgs/zainar/repos

@@ -1,0 +1,89 @@
+generated: '2026-08-02'
+method: derived
+source: https://github.com/zainar/locate-latency-measurement-script
+note: 'Cross-cutting request/response semantics for the ZaiNar Location Platform API,
+  DERIVED from ZaiNar''s own open-source client. ZaiNar publishes no developer
+  documentation, so every convention below is what the first-party client actually
+  implements — not a documented contract, and subject to change without notice.
+  Fields ZaiNar does not implement or publish are recorded as null/false rather than
+  guessed.'
+transport:
+  protocol: https
+  http_versions_observed: [HTTP/1.1, HTTP/2]
+  content_type: application/json
+  request_body_encoding: json
+  response_content_type: application/json
+authentication:
+  style: bearer-token-in-authorization-header
+  detail: authentication/zainar-authentication.yml
+versioning:
+  scheme: uri-path
+  current: v2
+  path_segment: /pipeline/r/api/v2/client
+  header_versioning: false
+  date_versioning: false
+  policy_url: null
+  note: 'Version is carried in the base path. No published versioning or migration
+    policy.'
+idempotency:
+  supported: false
+  header: null
+  note: 'No idempotency key header or parameter is implemented by the first-party
+    client and none is documented. Locate triggers carry repeat_count/backoff for
+    deliberate repetition, which is the opposite of an idempotency contract. No
+    Idempotency pointer is emitted for this provider.'
+pagination:
+  supported: null
+  style: null
+  note: 'Not observable — the only operations exposed by the first-party client are
+    single-resource actions, and no list endpoints are documented.'
+field_expansion:
+  supported: null
+sparse_fieldsets:
+  supported: null
+metadata:
+  supported: true
+  mechanism: 'Free-form "tags" object accepted on the locate action payload
+    (experimentID, exp_tag, ref_loc_id, ref_xy) and echoed back on the resulting
+    location events, used to correlate a trigger with its measurements.'
+request_tracing:
+  request_id_header: null
+  correlation_mechanism: 'Application-level correlation via meas_id, which appears
+    on emitted location events and is matched back to the triggering request by the
+    client. No transport-level request-id header is set or documented.'
+error_envelope:
+  format: null
+  rfc9457: false
+  shape: 'The first-party client raises a ClientError carrying (status, reason,
+    content) and falls back to raw text when the response content-type is not
+    application/json. No structured problem+json envelope, error code registry or
+    error reference is published, so errors/ is intentionally absent.'
+rate_limiting:
+  signaled: null
+  headers: []
+  note: 'No rate-limit headers or published quotas. Access is credential-gated
+    per customer.'
+async_semantics:
+  pattern: trigger-then-stream
+  description: 'The REST call triggers a locate and returns immediately; the actual
+    location measurement is delivered asynchronously over a separate real-time
+    WebSocket/Socket.IO stream keyed by site and node. Consumers MUST hold an open
+    event subscription to receive results — the REST response alone is not the
+    answer.'
+  detail: asyncapi/zainar-event-surface.yml
+regions:
+  multi_region: true
+  production_regions:
+  - {name: us, host: api.wifi-prd-us.zainar.net}
+  - {name: apac-japan, host: api.wifi-prd-jpn.zainar.net}
+  note: 'Region is selected by hostname; there is no region parameter or global
+    endpoint.'
+cross_links:
+  authentication: authentication/zainar-authentication.yml
+  lifecycle: lifecycle/zainar-lifecycle.yml
+  events: asyncapi/zainar-event-surface.yml
+  domain_security: security/zainar-domain-security.yml
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://github.com/zainar/locate-latency-measurement-script
+  http_status: 200

@@ -1,18 +1,63 @@
 aid: zainar
 name: ZaiNar
-description: 'ZaiNar is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'ZaiNar is a Positioning, Navigation and Timing (PNT) company that turns
+  existing wireless networks into a sensing system. Its patented digital signal processing
+  achieves sub-nanosecond time synchronization across commodity radios, which yields
+  sub-meter 3D positioning for any device that emits a radio signal — indoors, outdoors,
+  through walls and around corners — with no reliance on GPS/GNSS, cameras or additional
+  device power. ZaiNar works across frequencies and known wireless protocols (Wi-Fi,
+  5G/SRS, IoT radios) and is deployed today in healthcare equipment tracking, construction
+  site and safety-zone monitoring, and coordinated autonomous operations. The company
+  emerged from nine years of stealth in February 2026 with more than $100M raised and
+  a $1B+ valuation, and opened a Tokyo office in April 2026. Location data is delivered
+  to customers through a private, credential-gated REST and real-time WebSocket platform;
+  ZaiNar publishes no public developer portal, OpenAPI definition or SDKs as of this
+  profiling pass.'
+image: https://zainartech.com/zainar-logo.png
 url: https://raw.githubusercontent.com/api-evangelist/zainar/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment-pipeline
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
 - Company
-apis: []
+- Location
+- Positioning
+- Navigation
+- Timing
+- Wireless
+- Real-Time Location
+- Asset Tracking
+- IoT
+- Physical AI
+apis:
+- name: ZaiNar Location Platform API
+  description: 'Private, credential-gated REST API for the ZaiNar Wi-Fi location cloud.
+    Clients authenticate with a username/password to obtain a bearer token, then trigger
+    and manage locates against tracker and anchor nodes (e.g. POST nodes/{system_id}/action).
+    Resulting location measurements are delivered over a real-time WebSocket event
+    stream rather than in the REST response. The surface is documented publicly only
+    through ZaiNar''s own open-source latency measurement tool; there is no public
+    developer portal, OpenAPI definition or reference documentation.'
+  humanURL: https://github.com/zainar/locate-latency-measurement-script
+  baseURL: https://api.wifi-prd-us.zainar.net/pipeline/r/api/v2/client
+  tags:
+  - Location
+  - Positioning
+  - Asset Tracking
+  - Real-Time Location
+  properties:
+  - type: Authentication
+    url: authentication/zainar-authentication.yml
+  - type: Conventions
+    url: conventions/zainar-conventions.yml
+  - type: StreamingEndpoint
+    url: asyncapi/zainar-event-surface.yml
+  - type: SourceCode
+    url: https://github.com/zainar/locate-latency-measurement-script
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +65,37 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
+  url: https://zainartech.com/
+- type: Blog
+  url: https://zainartech.com/news
+- type: Support
+  url: https://zps.support.zainartech.com/servicedesk/customer/portals
+- type: Contact
+  url: https://zainartech.com/contact
+- type: GitHubOrganization
+  url: https://github.com/zainar
+- type: LinkedIn
+  url: https://www.linkedin.com/company/zainar
+- type: Twitter
+  url: https://x.com/zainartech
+- type: SecondaryMarket
   url: https://forgeglobal.com/zainar_stock/
+- type: Authentication
+  url: authentication/zainar-authentication.yml
+- type: Conventions
+  url: conventions/zainar-conventions.yml
+- type: Lifecycle
+  url: lifecycle/zainar-lifecycle.yml
+- type: DomainSecurity
+  url: security/zainar-domain-security.yml
+- type: LLMsTxt
+  url: llms/zainar-llms.txt
+- type: Packages
+  url: packages/zainar-packages.yml
+- type: StreamingEndpoint
+  url: asyncapi/zainar-event-surface.yml
+x-enrichment:
+  date: '2026-08-02'
+  status: enriched
+  artifacts_added: 8
+  pass: local-v1

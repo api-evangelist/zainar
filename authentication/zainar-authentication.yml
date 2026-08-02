@@ -1,0 +1,77 @@
+generated: '2026-08-02'
+method: derived
+source: https://github.com/zainar/locate-latency-measurement-script
+source_files:
+- rest_client.py
+- env_config.example.json
+- README.md
+note: 'ZaiNar publishes no OpenAPI definition and no public authentication documentation.
+  This profile is DERIVED from ZaiNar''s own open-source client (github.com/zainar),
+  which implements the real authentication flow against the production Wi-Fi location
+  cloud. Nothing here is invented; every field traces to a line in that first-party
+  repository. Access is credential-gated — ZaiNar issues usernames and passwords to
+  customers; there is no public sign-up.'
+summary:
+  types: [http]
+  api_key_in: []
+  oauth2_flows: []
+  public_signup: false
+  self_service: false
+schemes:
+- name: zainarToken
+  type: http
+  scheme: bearer
+  in: header
+  parameter: Authorization
+  description: 'Opaque API token issued by the platform''s own token endpoint and
+    sent verbatim in the Authorization request header on every subsequent call.'
+  sources: ['https://github.com/zainar/locate-latency-measurement-script/blob/main/rest_client.py']
+- name: zainarServiceKey
+  type: http
+  scheme: other
+  in: header
+  parameter: Authorization
+  description: 'Alternate machine-to-machine credential (SERVICE_KEY) supported by
+    the client in place of an interactive token; format is not published.'
+  sources: ['https://github.com/zainar/locate-latency-measurement-script/blob/main/rest_client.py']
+- name: zpsSessionCookie
+  type: apiKey
+  in: cookie
+  parameter: __session
+  description: 'JWT session cookie issued by the ZaiNar Positioning System (ZLP) web
+    console at zps.zainartech.com; used to authenticate the Socket.IO real-time
+    location stream. Browser-session credential, not a documented API credential.'
+  sources: ['https://github.com/zainar/locate-latency-measurement-script/blob/main/README.md']
+token_flow:
+  grant: password
+  endpoint: POST {baseURL}/authenticate
+  request_body: {username: string, password: string}
+  response_body: {token: string}
+  unauthenticated: true
+  presentation: 'Authorization: <token>'
+  refresh_interval_seconds: 1200
+  refresh_note: 'The first-party client refreshes the token every 20 minutes (TOKEN_REFRESH
+    = 20 * 60) and caches it on disk between runs; the server-side expiry is not published.'
+environments:
+- name: prod-us
+  base_url: https://api.wifi-prd-us.zainar.net/pipeline/r/api/v2/client
+  production: true
+- name: prod-apac
+  base_url: https://api.wifi-prd-jpn.zainar.net/pipeline/r/api/v2/client
+  production: true
+- name: int
+  base_url: https://api.wifi-int.zainar.net/pipeline/r/api/v2/client
+  production: false
+- name: dev
+  base_url: https://api.wifi-dev.zainar.net/pipeline/r/api/v2/client
+  production: false
+gaps:
+- No public authentication documentation page.
+- No OAuth 2.0 or OpenID Connect surface; no /.well-known/openid-configuration or
+  /.well-known/oauth-authorization-server on any host (see well-known/zainar-well-known.yml).
+- No scopes or permissions model published — scopes/ is intentionally absent.
+- Token lifetime and revocation semantics are not published.
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://raw.githubusercontent.com/zainar/locate-latency-measurement-script/main/rest_client.py
+  http_status: 200
